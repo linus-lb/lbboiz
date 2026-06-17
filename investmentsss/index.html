@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LB BOIZ INVESTMENT</title>
+    <!-- Tactical Monospace Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Anime.js for mechanical rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        /* Container para sa audio sa gitna */
+.audio-controls {
+    display: flex;
+    gap: 10px;
+}
+
+/* 3D Button Style */
+.btn-3d {
+    background: #001a05;
+    color: var(--hud-green);
+    border: 1px solid var(--hud-green);
+    padding: 5px 15px;
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
+    text-transform: uppercase;
+    /* 3D Effect */
+    box-shadow: 2px 2px 0px var(--hud-green);
+    transition: all 0.1s ease;
+}
+
+.btn-3d:active {
+    /* Pag pinindot, mawawala ang shadow para magmukhang na-press */
+    box-shadow: none;
+    transform: translateY(2px);
+}
+
+.btn-3d:hover {
+    background: var(--hud-green);
+    color: #000;
+}
+        :root {
+            --hud-green: #00ff33;
+            --hud-dim: rgba(0, 255, 51, 0.25);
+            --hud-dark: #000000;
+            --hud-surface: #030a04;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Share Tech Mono', monospace;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--hud-dark);
+            /* Ultra-fine digital grid background mapping */
+            background-image: 
+                linear-gradient(rgba(0, 255, 51, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 51, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--hud-green);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* --- Mainframe Top Border Frame --- */
+        .hud-top-frame {
+            width: 100%;
+            max-width: 1400px;
+            border-top: 3px double var(--hud-green);
+            border-bottom: 1px solid var(--hud-dim);
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hud-title-left {
+            font-size: 1.8rem;
+            letter-spacing: 6px;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--hud-green);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-title-right {
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--hud-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--hud-green);
+            animation: pulse-live 1s infinite alternate;
+        }
+
+        /* --- Main Tactical Theater Area --- */
+        .tactical-mainframe {
+            width: 100%;
+            max-width: 1400px;
+            height: calc(100vh - 350px);
+            min-height: 420px;
+            display: grid;
+            grid-template-columns: 280px 1fr 240px;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        /* Side Telemetry Panels */
+        .side-telemetry-panel {
+            border: 1px solid var(--hud-green);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .panel-sub-header {
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed var(--hud-green);
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- Center 3D Isometric Chart Stage --- */
+        .center-chart-stage {
+            border: 1px solid var(--hud-green);
+            background: rgba(3, 10, 4, 0.4);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 55px; /* Dinagdagan ang space sa ilalim para sa fixed labels */
+            gap: 35px;
+            perspective: 1400px;
+            perspective-origin: 50% 20%;
+        }
+
+        /* --- 3D Cyber-Hologram Vector Monolith --- */
+        .vector-node-3d {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-style: preserve-3d;
+            position: relative;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .digital-value-box {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid var(--hud-green);
+            background: var(--hud-dark);
+            padding: 2px 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px rgba(0,255,51,0.2);
+            z-index: 5;
+        }
+
+        /* Wireframe 3D Matrix Box Structure */
+        .wireframe-box-3d {
+            width: 80%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateY(-30deg); 
+        }
+
+        .wireframe-face {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 51, 0.04);
+            border: 1px solid var(--hud-green);
+        }
+
+        .face-front { 
+            transform: translateZ(18px); 
+            background: linear-gradient(0deg, rgba(0,255,51,0.15) 0%, transparent 100%);
+        }
+        .face-right {
+            width: 36px;
+            left: 100%;
+            transform-origin: left;
+            transform: rotateY(90deg) translateZ(-18px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .face-top {
+            height: 36px;
+            bottom: 100%;
+            transform-origin: bottom;
+            transform: rotateX(90deg) translateZ(18px);
+            background: rgba(0, 255, 51, 0.4);
+            box-shadow: 0 0 20px var(--hud-green);
+        }
+
+        /* PERMANENT FIX: Naka-lock sa pinakailalim ang mga Pangalan para hindi matakpan o gumalaw */
+        .node-caption {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-align: center;
+            position: absolute;
+            bottom: -40px; 
+            left: 0;
+            width: 100%;
+            color: var(--hud-green);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 0;
+            border-top: 1px dashed var(--hud-dim);
+            z-index: 10;
+        }
+
+        /* --- Lower Operational Control Terminal --- */
+        .bottom-command-deck {
+            width: 100%;
+            max-width: 1400px;
+            border: 1px solid var(--hud-green);
+            background: var(--hud-surface);
+            padding: 15px;
+            z-index: 20; /* Tiniyak na laging nasa ibabaw */
+        }
+
+        .deck-header {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--hud-green);
+            padding-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+
+        .deck-cell {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--hud-dim);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .cell-title {
+            font-size: 0.85rem;
+            color: var(--hud-green);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cell-input-frame {
+            display: flex;
+            background: #000;
+            border: 1px solid var(--hud-green);
+            margin-bottom: 8px;
+        }
+
+        .cell-input-frame::before {
+            content: 'ENC>';
+            font-size: 0.75rem;
+            padding-left: 6px;
+            align-self: center;
+            opacity: 0.7;
+        }
+
+        .input-terminal {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            padding: 4px;
+            text-align: center;
+            outline: none;
+        }
+
+        .cell-btn-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 6px 0;
+            background: transparent;
+            border: 1px solid var(--hud-green);
+            color: var(--hud-green);
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            background: var(--hud-green);
+            color: #000;
+            box-shadow: 0 0 10px var(--hud-green);
+        }
+
+        .btn-action.btn-minus:hover {
+            background: #ff0055 !important;
+            border-color: #ff0055 !important;
+            color: #fff !important;
+            box-shadow: 0 0 10px #ff0055 !important;
+        }
+
+        /* Tactical Row Elements */
+        .telemetry-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        /* --- CSS/SVG Biometric Fingerprint Box --- */
+        .biometric-scanner-box {
+            text-align: center;
+            padding: 10px 0;
+            border: 1px dashed var(--hud-dim);
+            background: rgba(0, 255, 51, 0.02);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 110px;
+            overflow: hidden;
+        }
+
+        .fingerprint-svg {
+            width: 70px;
+            height: 70px;
+            fill: none;
+            stroke: var(--hud-green);
+            stroke-width: 2;
+            stroke-linecap: round;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 5px var(--hud-green));
+        }
+
+        /* Laser Animation Bar overlaying the SVG */
+        .biometric-scanner-box::after {
+            content: '';
+            position: absolute;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: #fff;
+            box-shadow: 0 0 12px 2px var(--hud-green);
+            animation: laser-scan 2.5s infinite ease-in-out;
+        }
+
+        @keyframes laser-scan {
+            0% { top: 10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 90%; opacity: 0; }
+        }
+
+        @keyframes pulse-live {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 1050px) {
+            .tactical-mainframe { grid-template-columns: 1fr; }
+            .side-telemetry-panel { display: none; }
+            .bottom-command-deck { .deck-grid { grid-template-columns: repeat(3, 1fr); } }
+        }
+    </style>
+</head>
+<body><audio id="bg-music" loop>
+    <source src="Gat-Putch.mp3" type="audio/mpeg">
+</audio>
+
+    <!-- Main Title Frame Group (Palit bungo -> Cyber Crosshair Target Icon ⌖) -->
+    <div class="hud-top-frame">
+    <div class="hud-title-left">⌖ LB BOIZ INVESTMENT</div>
+    
+    <div class="audio-controls">
+        <button class="btn-3d" onclick="document.getElementById('bg-music').play()">PLAY THE MUSIC BEYBEH</button>
+        <button class="btn-3d" onclick="document.getElementById('bg-music').pause()">PAUSE THAT SHIT</button>
+    </div>
+
+    <div class="hud-title-right">
+        <span class="live-dot"></span> SYSTEM ACCESS GRANTED
+    </div>
+</div>
+
+    <!-- Main Strategic Interface Grid -->
+    <div class="tactical-mainframe">
+        
+        <!-- Left Threat Matrix Panel -->
+        <div class="side-telemetry-panel">
+            <div>
+                <div class="panel-sub-header">SECURITY PROTOCOL <span></span></div>
+                <div class="telemetry-row"><span>OVERRIDE_LOCK</span><span>[ENGAGED]</span></div>
+                <div class="telemetry-row"><span>BREACH_PROT</span><span>[ACTIVE]</span></div>
+                <div class="telemetry-row"><span>DATABASE_LINK</span><span>[SECURED]</span></div>
+                <div class="telemetry-row"><span>QUANTUM_KEY</span><span>[VALID]</span></div>
+            </div>
+            <div>
+                <div class="panel-sub-header">IDENTITY BIOMETRIC</div>
+                <div class="biometric-scanner-box">
+                    <svg class="fingerprint-svg" viewBox="0 0 24 24">
+                        <path d="M12 1c-4.97 0-9 4.03-9 9 0 .55.45 1 1 1s1-.45 1-1c0-3.87 3.13-7 7-7s7 3.13 7 7c0 .55.45 1 1 1s1-.45 1-1c0-4.97-4.03-9-9-9z"/>
+                        <path d="M12 5c-2.76 0-5 2.24-5 5 0 .55.45 1 1 1s1-.45 1-1c0-1.66 1.34-3 3-3s3 1.34 3 3c0 2.21-1.79 4-4 4s-4-1.79-4-4c0-.55-.45-1-1-1s-1 .45-1 1c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.76-2.24-5-5-5z"/>
+                        <path d="M8.2 16.57c-.47-.29-1.09-.14-1.39.33-.29.47-.14 1.09.33 1.39 1.44.89 2.59 1.48 4.36 1.7 1.73.22 3.86.02 5.67-.93.48-.25.67-.86.42-1.35-.25-.48-.86-.67-1.35-.42-1.42.74-3.15.9-4.56.72-1.4-.18-2.26-.65-3.48-1.44z"/>
+                        <path d="M12 9c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1z"/>
+                    </svg>
+                </div>
+                <div style="font-size: 0.75rem; text-align: center; margin-top: 5px; opacity: 0.6;">
+                    SCANNING FOR PRIVILEGES...
+                </div>
+            </div>
+        </div>
+
+        <!-- Center 3D Isometric Chart Stage -->
+        <div class="center-chart-stage">
+            <!-- ROSARIO -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-rosario">0</div>
+                <div class="wireframe-box-3d" id="cube-rosario" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">ROSARIO</div>
+            </div>
+
+            <!-- BIÑAN -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-binan">0</div>
+                <div class="wireframe-box-3d" id="cube-binan" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">BIÑAN</div>
+            </div>
+
+            <!-- MANGGAHAN -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-manggahan">0</div>
+                <div class="wireframe-box-3d" id="cube-manggahan" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">MANGGAHAN</div>
+            </div>
+
+            <!-- SIARGAO -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-siargao">0</div>
+                <div class="wireframe-box-3d" id="cube-siargao" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">SIARGAO</div>
+            </div>
+
+            <!-- SFC LAUNION -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-sfclaunion">0</div>
+                <div class="wireframe-box-3d" id="cube-sfclaunion" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">SFC LAUNION</div>
+            </div>
+
+            <!-- PULO -->
+            <div class="vector-node-3d">
+                <div class="digital-value-box" id="total-pulo">0</div>
+                <div class="wireframe-box-3d" id="cube-pulo" style="height: 40px;">
+                    <div class="wireframe-face face-front"></div>
+                    <div class="wireframe-face face-right"></div>
+                    <div class="wireframe-face face-top"></div>
+                </div>
+                <div class="node-caption">PULO</div>
+            </div>
+        </div>
+
+        <!-- Right Core Diagnostics Sub-Panel (Palit bungo -> Terminal Prompt Design) -->
+        <div class="side-telemetry-panel">
+            <div>
+                <div class="panel-sub-header">SYSTEM DIAGS <span>>_</span></div>
+                <div class="telemetry-row"><span>CPU_TEMP</span><span>42°C</span></div>
+                <div class="telemetry-row"><span>MAL_BLOCK</span><span>0 / ACTIVE</span></div>
+                <div class="telemetry-row"><span>OVERLOAD</span><span>0.00%</span></div>
+                <div class="telemetry-row"><span>INTEGRITY</span><span>100.00%</span></div>
+            </div>
+            <div>
+                <div class="panel-sub-header">SYSTEM MESSAGES</div>
+                <div id="runtime-logs" style="font-size: 0.75rem; color: var(--hud-dim); font-family: monospace; line-height: 1.4;">
+                    >> INITIALIZING HANDSHAKE...<br>>> REALTIME_SYNC: OK
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Command Deck Console -->
+    <div class="bottom-command-deck">
+        <div class="deck-header"><span>CHOOSE YOUR INVESTMENT</span> <span>I'M WATCHING YOU -HAX</span></div>
+        <div class="deck-grid">
+            <!-- ROSARIO -->
+            <div class="deck-cell">
+                <div class="cell-title">ROSARIO (FRECEL) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-rosario" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('rosario', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('rosario', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+            <!-- BIÑAN -->
+            <div class="deck-cell">
+                <div class="cell-title">BIÑAN (JASMINE) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-binan" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('binan', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('binan', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+            <!-- MANGGAHAN -->
+            <div class="deck-cell">
+                <div class="cell-title">MANGGAHAN (ALLYSA) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-manggahan" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('manggahan', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('manggahan', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+            <!-- SIARGAO -->
+            <div class="deck-cell">
+                <div class="cell-title">SIARGAO (CHRISTINE) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-siargao" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('siargao', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('siargao', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+            <!-- SFC LAUNION -->
+            <div class="deck-cell">
+                <div class="cell-title">SFC LAUNION (SHINE) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-sfclaunion" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('sfclaunion', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('sfclaunion', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+            <!-- PULO -->
+            <div class="deck-cell">
+                <div class="cell-title">PULO (MARIALUZ) <span></span></div>
+                <div class="cell-input-frame">
+                    <input type="number" id="input-pulo" class="input-terminal" value="1" min="1">
+                </div>
+                <div class="cell-btn-group">
+                    <button class="btn-action" onclick="adjustPoints('pulo', 'add')">AHH DADI</button>
+                    <button class="btn-action btn-minus" onclick="adjustPoints('pulo', 'minus')">ARAY MO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase System Synchronization Module -->
+    <script type="module">
+        window.addEventListener('click', () => {
+    const audio = document.getElementById('bg-music');
+    if (audio.paused) {
+        audio.play().catch(e => console.log("Waiting for user interaction"));
+    }
+}, { once: true });
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA9sPkhTOcPqazkVzB_ZZ6247YLMEDRUrQ",
+            authDomain: "lb-boiz-investment.firebaseapp.com",
+            databaseURL: "https://lb-boiz-investment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "lb-boiz-investment",
+            storageBucket: "lb-boiz-investment.firebasestorage.app",
+            messagingSenderId: "510807368001",
+            appId: "1:510807368001:web:e937625e643994593781c0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'investments');
+
+        let currentPoints = {
+            rosario: 0, binan: 0, manggahan: 0, siargao: 0, sfclaunion: 0, pulo: 0
+        };
+
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                currentPoints.rosario = data.rosario || 0;
+                currentPoints.binan = data.binan || 0;
+                currentPoints.manggahan = data.manggahan || 0;
+                currentPoints.siargao = data.siargao || 0;
+                currentPoints.sfclaunion = data.sfclaunion || 0;
+                currentPoints.pulo = data.pulo || 0;
+            }
+            renderTactical3D();
+        });
+
+        function renderTactical3D() {
+            const values = Object.values(currentPoints);
+            const maxPoints = Math.max(...values, 10);
+
+            const stageHeight = document.querySelector('.center-chart-stage').clientHeight;
+            // Binawasan ang max height calculation para hindi lumampas o sumasabog paitaas
+            const maxVectorHeight = stageHeight - 130; 
+
+            Object.keys(currentPoints).forEach(key => {
+                const points = currentPoints[key];
+                
+                let targetHeight = (points / maxPoints) * maxVectorHeight;
+                if (targetHeight < 40) targetHeight = 40; 
+
+                document.getElementById(`total-${key}`).innerText = points;
+
+                anime({
+                    targets: `#cube-${key}`,
+                    height: targetHeight,
+                    duration: 500,
+                    easing: 'easeOutQuint'
+                });
+            });
+        }
+
+        function adjustPoints(name, operation) {
+            const inputEl = document.getElementById(`input-${name}`);
+            const multiplier = parseInt(inputEl.value) || 1;
+
+            let currentVal = currentPoints[name] || 0;
+            let finalVal = currentVal;
+
+            if (operation === 'add') {
+                finalVal = currentVal + multiplier;
+            } else if (operation === 'minus') {
+                finalVal = currentVal - multiplier;
+                if (finalVal < 0) finalVal = 0;
+            }
+
+            inputEl.value = "1";
+
+            set(ref(db, 'investments/' + name), finalVal)
+                .catch((error) => console.error("CRITICAL BLOCK DESYNC:", error));
+        }
+
+        const logs = ["FRECEL, COFFEE DATE?", "NAGKAON KANA ALLY?", "HOW'S YOUR DAY CHRISTINE", "TAKE CARE SHINE", "HAVE A NICE DAY MA.LUZ", "JASMINE PAKISS"];
+        setInterval(() => {
+            const l1 = logs[Math.floor(Math.random()*logs.length)];
+            const l2 = logs[Math.floor(Math.random()*logs.length)];
+            document.getElementById('runtime-logs').innerHTML = `>> PIPELINE: ACTIVE<br>>> ${l1}<br>>> ${l2}`;
+        }, 2500);
+
+        window.adjustPoints = adjustPoints;
+    </script>
+</body>
+</html>
