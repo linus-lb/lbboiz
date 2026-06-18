@@ -15,7 +15,43 @@
     display: flex;
     gap: 10px;
 }
-        
+        /* ANNOUNCEMENT */
+.news-ticker-container {
+  position: top;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 40, 0, 0.9);
+  border-top: 1px solid #00ff00;
+  border-bottom: 1px solid #00ff00;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 1px 0;
+  z-index: 9999;
+  text-shadow: 0 0 1px #00ff00;
+}
+
+.news-ticker-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker-move 10s linear infinite;
+}
+
+@keyframes ticker-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+.control-panel {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10000;
+}
 /* 3D Button Style */
 .btn-3d {
     background: #001a05;
@@ -403,6 +439,13 @@
     </style>
 </head>
 <body>
+        <!-- Dito mo ilalagay sa HTML file -->
+<div class="news-ticker-container">
+  <div class="news-ticker-content" id="tickerText">
+    SYSTEM BROADCAST: KIER KUPAL
+  </div>
+</div>
+    
 <audio id="bg-music" loop>
     <source src="Gat-Putch.mp3" type="audio/mpeg">
 </audio>
