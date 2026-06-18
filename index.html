@@ -718,26 +718,6 @@
         }, 2500);
 
         window.adjustPoints = adjustPoints;
-        <script>
-function showAnnouncement(message) {
-  const modal = document.getElementById("announcementModal");
-  document.getElementById("announcementText").innerText = message;
-  modal.style.display = "block";
-}
-
-function closeAnnouncement() {
-  document.getElementById("announcementModal").style.display = "none";
-}
-
-function broadcastMessage() {
-  const input = document.getElementById("announcementInput");
-  if (input.value.trim() !== "") {
-    showAnnouncement("SYSTEM BROADCAST: " + input.value);
-    input.value = "";
-    setTimeout(closeAnnouncement, 3000);
-  }
-}
-</script>
     </script>
 </body>
 </html>
