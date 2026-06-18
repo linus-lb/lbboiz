@@ -401,11 +401,28 @@
             .bottom-command-deck { .deck-grid { grid-template-columns: repeat(3, 1fr); } }
         }
     </style>
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; }
+.modal-content { background: #000; color: #0f0; border: 1px solid #0f0; margin: 15% auto; padding: 20px; width: 300px; text-align: center; font-family: monospace; }
+.announcement-control { margin: 20px 0; padding: 10px; border: 1px solid #0f0; text-align: center; }
+.announcement-control input { background: #000; color: #0f0; border: 1px solid #0f0; padding: 5px; width: 60%; }
+.close-btn { cursor: pointer; float: right; }
 </head>
 <body><audio id="bg-music" loop>
     <source src="Gat-Putch.mp3" type="audio/mpeg">
 </audio>
+<!-- Sa loob ng <body> -->
+<div class="announcement-control">
+  <input type="text" id="announcementInput" placeholder="Mag-announce dito...">
+  <button onclick="broadcastMessage()">SEND ANNOUNCEMENT</button>
+</div>
 
+<!-- Ito yung popup modal (ilagay ito bago matapos ang <body>) -->
+<div id="announcementModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeAnnouncement()">&times;</span>
+    <p id="announcementText"></p>
+  </div>
+</div>
     <!-- Main Title Frame Group (Palit bungo -> Cyber Crosshair Target Icon ⌖) -->
     <div class="hud-top-frame">
     <div class="hud-title-left">⌖ FINE SHAWTY RANKINGS</div>
@@ -706,6 +723,26 @@
         }, 2500);
 
         window.adjustPoints = adjustPoints;
+        <script>
+function showAnnouncement(message) {
+  const modal = document.getElementById("announcementModal");
+  document.getElementById("announcementText").innerText = message;
+  modal.style.display = "block";
+}
+
+function closeAnnouncement() {
+  document.getElementById("announcementModal").style.display = "none";
+}
+
+function broadcastMessage() {
+  const input = document.getElementById("announcementInput");
+  if (input.value.trim() !== "") {
+    showAnnouncement("SYSTEM BROADCAST: " + input.value);
+    input.value = "";
+    setTimeout(closeAnnouncement, 3000);
+  }
+}
+</script>
     </script>
 </body>
 </html>
